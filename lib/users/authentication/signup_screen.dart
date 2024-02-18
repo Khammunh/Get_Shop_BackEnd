@@ -1,23 +1,24 @@
-// ignore_for_file: avoid_unnecessary_containers
+// ignore_for_file: no_leading_underscores_for_local_identifiers
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:getxshop/users/authentication/signup_screen.dart';
+import 'package:getxshop/users/authentication/login_screen.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class SignScreen extends StatefulWidget {
+  const SignScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignScreen> createState() => _SignScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _isObscure = true.obs;
+class _SignScreenState extends State<SignScreen> {
   @override
   Widget build(BuildContext context) {
+    final _formKey = GlobalKey<FormState>();
+    final _nameController = TextEditingController();
+    final _emailController = TextEditingController();
+    final _passwordController = TextEditingController();
+    final _isObscure = true.obs;
     return Scaffold(
       backgroundColor: Colors.blue,
       body: LayoutBuilder(builder: (context, cons) {
@@ -31,10 +32,9 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: MediaQuery.of(context).size.width,
                   height: 285,
                   child: Image.asset(
-                    "assets/images/logo_clothes.jpg",
+                    "assets/images/register.jpg",
                   ),
                 ),
-
                 //Login screen sign-in form
                 Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -56,11 +56,51 @@ class _LoginScreenState extends State<LoginScreen> {
                       padding: const EdgeInsets.fromLTRB(30, 30, 30, 8),
                       child: Column(
                         children: [
-                          //email-password-login button
+                          //name-email-password-sign up button
                           Form(
                             key: _formKey,
                             child: Column(
                               children: [
+                                //name
+                                TextFormField(
+                                  controller: _nameController,
+                                  validator: (val) =>
+                                      val == "" ? "Please write name" : null,
+                                  decoration: InputDecoration(
+                                    prefixIcon: const Icon(
+                                      Icons.person,
+                                      color: Colors.black,
+                                    ),
+                                    hintText: 'name',
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                      borderSide:
+                                          const BorderSide(color: Colors.white),
+                                    ),
+                                    enabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                      borderSide:
+                                          const BorderSide(color: Colors.white),
+                                    ),
+                                    focusedBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                      borderSide:
+                                          const BorderSide(color: Colors.white),
+                                    ),
+                                    disabledBorder: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                      borderSide:
+                                          const BorderSide(color: Colors.white),
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 14,
+                                      vertical: 6,
+                                    ),
+                                    fillColor: Colors.white,
+                                    filled: true,
+                                  ),
+                                ),
+                                const SizedBox(height: 10),
                                 //email
                                 TextFormField(
                                   controller: _emailController,
@@ -171,7 +211,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         horizontal: 28,
                                       ),
                                       child: Text(
-                                        "Login",
+                                        "SignUp",
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 16,
@@ -188,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Text(
-                                'Dont have an Account?',
+                                'Already have an Account?',
                                 style: TextStyle(
                                   color: Colors.white,
                                 ),
@@ -197,35 +237,11 @@ class _LoginScreenState extends State<LoginScreen> {
                               TextButton(
                                 onPressed: () {
                                   Get.to(
-                                    const SignScreen(),
+                                    const LoginScreen(),
                                   );
                                 },
                                 child: const Text(
-                                  'SignUp Here',
-                                  style: TextStyle(
-                                    color: Colors.blueAccent,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const Text(
-                            "Or",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          //Admin
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text(
-                                'Are you an admin?',
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              const SizedBox(width: 8),
-                              TextButton(
-                                onPressed: () {},
-                                child: const Text(
-                                  'Click Here',
+                                  'Login Here',
                                   style: TextStyle(
                                     color: Colors.blueAccent,
                                   ),

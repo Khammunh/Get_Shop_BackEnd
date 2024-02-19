@@ -1,8 +1,13 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
+// ignore_for_file: no_leading_underscores_for_local_identifiers, unused_element
+
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:getxshop/api_connection/api_connection.dart';
 import 'package:getxshop/users/authentication/login_screen.dart';
+import 'package:http/http.dart' as http;
 
 class SignScreen extends StatefulWidget {
   const SignScreen({super.key});
@@ -19,6 +24,25 @@ class _SignScreenState extends State<SignScreen> {
     final _emailController = TextEditingController();
     final _passwordController = TextEditingController();
     final _isObscure = true.obs;
+    validateUserEmail() async {
+      try {
+        var res = await http.post(Uri.parse(API.validateEmail),
+            body: {'user_email': _emailController.text.trim()});
+        //connection with api to server success
+        if (res.statusCode == 200) {
+          var resBody = jsonDecode(res.body);
+          if (resBody['exist']) {
+            Fluttertoast.showToast(
+                msg:
+                    "Email is already in someone else use. Try another email.");
+          }
+          else{
+            //register & save new user record to database
+          }
+        }
+      } catch (e) {}
+    }
+
     return Scaffold(
       backgroundColor: Colors.blue,
       body: LayoutBuilder(builder: (context, cons) {
@@ -203,7 +227,11 @@ class _SignScreenState extends State<SignScreen> {
                                   color: Colors.black,
                                   borderRadius: BorderRadius.circular(30),
                                   child: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      if (_formKey.currentState!.validate()) {
+                                        //validate the email
+                                      }
+                                    },
                                     borderRadius: BorderRadius.circular(30),
                                     child: const Padding(
                                       padding: EdgeInsets.symmetric(

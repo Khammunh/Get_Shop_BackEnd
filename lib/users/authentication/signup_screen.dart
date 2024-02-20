@@ -9,6 +9,8 @@ import 'package:getxshop/api_connection/api_connection.dart';
 import 'package:getxshop/users/authentication/login_screen.dart';
 import 'package:http/http.dart' as http;
 
+import '../model/user.dart';
+
 class SignScreen extends StatefulWidget {
   const SignScreen({super.key});
 
@@ -24,23 +26,54 @@ class _SignScreenState extends State<SignScreen> {
     final _emailController = TextEditingController();
     final _passwordController = TextEditingController();
     final _isObscure = true.obs;
+
+    registerAndSaveUserRecord() async {
+      User userModel = User(
+        1,
+        _nameController.text.trim(),
+        _emailController.text.trim(),
+        _passwordController.text.trim(),
+      );
+      try {
+        var res = await http.post(
+          Uri.parse(API.signUp),
+          body: userModel.toJson(),
+        );
+        if (res.statusCode == 200) {
+          var resBodyOfSignUp = jsonDecode(res.body);
+          if (resBodyOfSignUp['success'] == true) {
+            Fluttertoast.showToast(
+                msg: "Congratulations, you are SignUp successfully");
+          } else {
+            Fluttertoast.showToast(msg: "Error Occurred, Try again.");
+          }
+        }
+      } catch (e) {
+        print(e.toString());
+        Fluttertoast.showToast(msg: e.toString());
+      }
+    }
+
     validateUserEmail() async {
       try {
         var res = await http.post(Uri.parse(API.validateEmail),
             body: {'user_email': _emailController.text.trim()});
         //connection with api to server success
         if (res.statusCode == 200) {
-          var resBody = jsonDecode(res.body);
-          if (resBody['exist']) {
+          var resBodyOfValidateEmail = jsonDecode(res.body);
+          if (resBodyOfValidateEmail['emailFound'] == true) {
             Fluttertoast.showToast(
                 msg:
                     "Email is already in someone else use. Try another email.");
-          }
-          else{
+          } else {
             //register & save new user record to database
+            registerAndSaveUserRecord();
           }
         }
-      } catch (e) {}
+      } catch (e) {
+        print(e.toString());
+        Fluttertoast.showToast(msg: e.toString());
+      }
     }
 
     return Scaffold(
@@ -230,6 +263,7 @@ class _SignScreenState extends State<SignScreen> {
                                     onTap: () {
                                       if (_formKey.currentState!.validate()) {
                                         //validate the email
+                                        registerAndSaveUserRecord();
                                       }
                                     },
                                     borderRadius: BorderRadius.circular(30),

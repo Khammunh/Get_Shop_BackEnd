@@ -263,7 +263,8 @@ class _SignScreenState extends State<SignScreen> {
                                     onTap: () {
                                       if (_formKey.currentState!.validate()) {
                                         //validate the email
-                                        registerAndSaveUserRecord();
+                                        validateUserEmail();
+                                        print(validateUserEmail());
                                       }
                                     },
                                     borderRadius: BorderRadius.circular(30),

@@ -75,7 +75,8 @@ class _SignScreenState extends State<SignScreen> {
         Fluttertoast.showToast(msg: e.toString());
       }
     }
-    bool _isButtonDisabled = false;
+
+    bool _clearText = false;
 
     return Scaffold(
       backgroundColor: Colors.blue,
@@ -260,35 +261,12 @@ class _SignScreenState extends State<SignScreen> {
                                 Material(
                                   color: Colors.black,
                                   borderRadius: BorderRadius.circular(30),
-                                  // child: InkWell(
-                                  //   onTap: () {
-                                  //     if (_formKey.currentState!.validate()) {
-                                  //       //validate the email
-                                  //       validateUserEmail();
-                                  //       print(validateUserEmail());
-                                  //     }
-                                  //   },
-                                  //   borderRadius: BorderRadius.circular(30),
-                                  //   child: const Padding(
-                                  //     padding: EdgeInsets.symmetric(
-                                  //       vertical: 10,
-                                  //       horizontal: 28,
-                                  //     ),
-                                  //     child: Text(
-                                  //       "SignUp",
-                                  //       style: TextStyle(
-                                  //         color: Colors.white,
-                                  //         fontSize: 16,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // ),
                                   child: InkWell(
                                     onTap: () {
                                       if (_formKey.currentState!.validate()) {
                                         // Disable the button to prevent multiple submissions
                                         setState(() {
-                                          _isButtonDisabled = true;
+                                          _clearText = true;
                                         });
 
                                         // Validate the email and proceed with registration

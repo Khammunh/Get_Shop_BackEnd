@@ -1,8 +1,17 @@
 // ignore_for_file: avoid_unnecessary_containers
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:getxshop/users/authentication/signup_screen.dart';
+import 'package:getxshop/users/fragments/dashboard_of_fragments.dart';
+import 'package:getxshop/users/userPreferences/user_preferences.dart';
+import 'package:http/http.dart' as http;
+
+import '../../api_connection/api_connection.dart';
+import '../model/user.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -16,6 +25,37 @@ class _LoginScreenState extends State<LoginScreen> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _isObscure = true.obs;
+
+  loginUserNow() async {
+    try {
+      var res = await http.post(
+        Uri.parse(API.login),
+        body: {
+          "user_email": _emailController.text.trim(),
+          "user_password": _passwordController.text.trim()
+        },
+      );
+      if (res.statusCode == 200) {
+        var resBodyOfLogin = jsonDecode(res.body);
+        if (resBodyOfLogin['success'] == true) {
+          Fluttertoast.showToast(msg: "you are logged-in successfully");
+          User userInfo = User.fromJson(resBodyOfLogin["userData"]);
+
+          //Save userInfo to local storage using shared preferences
+          await RememberUserPreferences.saveRememberUser(userInfo);
+          Future.delayed(const Duration(milliseconds: 2000), () {
+            Get.to(const DashboardOfFragments());
+          });
+        } else {
+          Fluttertoast.showToast(
+              msg: "Please write correct password or email, Try again.");
+        }
+      }
+    } catch (errorMsg) {
+      print("Error :: " + errorMsg.toString());
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -163,7 +203,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                   color: Colors.black,
                                   borderRadius: BorderRadius.circular(30),
                                   child: InkWell(
-                                    onTap: () {},
+                                    onTap: () {
+                                      //Login
+                                     if(_formKey.currentState!.validate()){
+                                       loginUserNow();
+                                     }
+                                    },
                                     borderRadius: BorderRadius.circular(30),
                                     child: const Padding(
                                       padding: EdgeInsets.symmetric(

@@ -42,9 +42,9 @@ class _LoginScreenState extends State<LoginScreen> {
           User userInfo = User.fromJson(resBodyOfLogin["userData"]);
 
           //Save userInfo to local storage using shared preferences
-          await RememberUserPreferences.saveRememberUser(userInfo);
+          await RememberUserPreferences.storeUserInfo(userInfo);
           Future.delayed(const Duration(milliseconds: 2000), () {
-            Get.to(const DashboardOfFragments());
+            Get.to( DashboardOfFragments());
           });
         } else {
           Fluttertoast.showToast(

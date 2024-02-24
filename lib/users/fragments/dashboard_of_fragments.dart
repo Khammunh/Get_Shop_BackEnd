@@ -34,8 +34,19 @@ class DashboardOfFragments extends StatelessWidget {
       "non_active_icon": Icons.favorite_border,
       "label": "Favorites"
     },
+    {
+      "active_icon": Icons.person,
+      "non_active_icon": Icons.person_outline,
+      "label": "Favorites"
+    },
+    {
+      "active_icon": Icons.add_box,
+      "non_active_icon": Icons.gif_box_outlined,
+      "label": "Favorites"
+    },
   ];
 
+  RxInt _indexNumber = 0.obs;
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -44,7 +55,37 @@ class DashboardOfFragments extends StatelessWidget {
         _rememberCurrentUser.getUserInfo();
       },
       builder: (controller) {
-        return const Scaffold();
+        return Scaffold(
+          backgroundColor: Colors.black,
+          body: SafeArea(
+            child: Obx(
+              () => _fragmentScreen[_indexNumber.value],
+            ),
+          ),
+          bottomNavigationBar: Obx(
+            () => BottomNavigationBar(
+              items: List.generate(
+                4,
+                (index) {
+                  var navBtnProperty = _navigationButtonsProperties[index];
+                  return BottomNavigationBarItem(
+                      backgroundColor: Colors.black,
+                      icon: Icon(navBtnProperty["non_active_icon"]),
+                      activeIcon: Icon(navBtnProperty["active_icon"]),
+                      label: navBtnProperty["label"]);
+                },
+              ),
+              currentIndex: _indexNumber.value,
+              onTap: (value) {
+                _indexNumber.value = value;
+              },
+              showSelectedLabels: true,
+              showUnselectedLabels: true,
+              selectedItemColor: Colors.white,
+              unselectedItemColor: Colors.white24,
+            ),
+          ),
+        );
       },
     );
   }
